@@ -2,7 +2,6 @@ package com.client.ws.rasmooplus.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,11 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.client.ws.rasmooplus.dto.SubscriptionTypeDto;
 import com.client.ws.rasmooplus.service.SubscriptionTypeService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/subscription-type")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class SubscriptionTypeController {
 
     private final SubscriptionTypeService subscriptionTypeService;
@@ -39,8 +39,7 @@ public class SubscriptionTypeController {
     }
     
     @PostMapping
-    public ResponseEntity<SubscriptionTypeDto> create(@RequestBody final SubscriptionTypeDto subscriptionTypeDto) {
-        
+    public ResponseEntity<SubscriptionTypeDto> create(@Valid @RequestBody final SubscriptionTypeDto subscriptionTypeDto) {
         SubscriptionTypeDto subscriptionTypeCreate = this.subscriptionTypeService.create(subscriptionTypeDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeCreate);
     }
