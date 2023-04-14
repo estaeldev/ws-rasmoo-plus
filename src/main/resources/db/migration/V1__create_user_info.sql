@@ -14,7 +14,7 @@ CREATE TABLE if not exists user_type (
 );
 
 CREATE TABLE if not exists users (
-    users_id SERIAL PRIMARY KEY,
+    users_id UUID NOT NULL PRIMARY KEY,
     name VARCHAR NOT NULL,
     email VARCHAR NOT NULL UNIQUE,
     phone VARCHAR NOT NULL UNIQUE,
@@ -36,7 +36,7 @@ CREATE TABLE if not exists user_payment_info(
     price DECIMAL(10,2) NOT NULL,
     instalments INTEGER NOT NULL,
     dt_payment DATE NOT NULL,
-    user_id INTEGER,
+    user_id UUID,
     FOREIGN KEY(user_id) REFERENCES users(users_id)
 );
 
