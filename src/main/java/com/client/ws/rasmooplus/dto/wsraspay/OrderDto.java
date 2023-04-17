@@ -1,5 +1,7 @@
 package com.client.ws.rasmooplus.dto.wsraspay;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class OrderDto {
 
     private String customerId;
-    private Number discount;	
+    private BigDecimal discount;	
     private String id;	
     private String productAcronym;
 

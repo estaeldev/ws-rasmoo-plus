@@ -19,14 +19,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
 
-    private static final String WS_RASPAY_URL = "https://ws-raspay.herokuapp.com/ws-raspay";
+    private static final String WS_RASPAY_URL = "http://localhost:8081/ws-raspay";
     private final RestTemplate restTemplate = new RestTemplate();
+    private final HttpHeaders headers = getHttpHeaders();
 
     @Override
     public CustomerDto createCustomer(CustomerDto dto) {
         try {
-            HttpHeaders headers = getHttpHeaders();
-            HttpEntity<CustomerDto> request = new HttpEntity<>(dto, headers);
+            HttpEntity<CustomerDto> request = new HttpEntity<>(dto, this.headers);
             ResponseEntity<CustomerDto> response = this.restTemplate.exchange(WS_RASPAY_URL+"/v1/customer", 
                 HttpMethod.POST, request, CustomerDto.class);
             return response.getBody();
@@ -37,8 +37,15 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
 
     @Override
     public OrderDto createOrder(OrderDto dto) {
-       
-        throw new UnsupportedOperationException("Unimplemented method 'createOrder'");
+        try {
+            HttpEntity<OrderDto> request = new HttpEntity<>(dto, this.headers);
+            ResponseEntity<OrderDto> response = this.restTemplate
+                .exchange(WS_RASPAY_URL+"/v1/order", HttpMethod.POST, request, OrderDto.class);
+            return response.getBody();
+        } catch (Exception e) {
+            throw e;
+        }
+
     }
 
     @Override
@@ -51,9 +58,9 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
     private HttpHeaders getHttpHeaders() {
         String crendential = "rasmooplus:r@sm00";
         String base64 = Base64.encodeBase64String(crendential.getBytes());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Basic " + base64);
-        return headers;
+        HttpHeaders headersField = new HttpHeaders();
+        headersField.add("Authorization", "Basic " + base64);
+        return headersField;
     }
     
 }
