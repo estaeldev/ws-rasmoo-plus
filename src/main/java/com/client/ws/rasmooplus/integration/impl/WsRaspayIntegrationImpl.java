@@ -1,6 +1,7 @@
 package com.client.ws.rasmooplus.integration.impl;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,7 +20,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
 
-    private static final String WS_RASPAY_URL = "http://localhost:8081/ws-raspay";
+    @Value("${webservices.raspay.host}")
+    private String raspayHost;
+    @Value("${webservices.raspay.v1.customer}")
+    private String customerUrl;
+    @Value("${webservices.raspay.v1.order}")
+    private String orderUrl;
+    @Value("${webservices.raspay.v1.payment}")
+    private String paymentUrl;
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final HttpHeaders headers = getHttpHeaders();
 
@@ -27,7 +36,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
     public CustomerDto createCustomer(CustomerDto dto) {
         try {
             HttpEntity<CustomerDto> request = new HttpEntity<>(dto, this.headers);
-            ResponseEntity<CustomerDto> response = this.restTemplate.exchange(WS_RASPAY_URL+"/v1/customer", 
+            ResponseEntity<CustomerDto> response = this.restTemplate.exchange(raspayHost+customerUrl, 
                 HttpMethod.POST, request, CustomerDto.class);
             return response.getBody();
         } catch (Exception e) {
@@ -40,7 +49,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
         try {
             HttpEntity<OrderDto> request = new HttpEntity<>(dto, this.headers);
             ResponseEntity<OrderDto> response = this.restTemplate
-                .exchange(WS_RASPAY_URL+"/v1/order", HttpMethod.POST, request, OrderDto.class);
+                .exchange(raspayHost+orderUrl, HttpMethod.POST, request, OrderDto.class);
             return response.getBody();
         } catch (Exception e) {
             throw e;
@@ -50,8 +59,14 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
 
     @Override
     public Boolean processPayment(PaymentDto dto) {
-       
-        throw new UnsupportedOperationException("Unimplemented method 'processPayment'");
+        try {
+            HttpEntity<PaymentDto> request = new HttpEntity<>(dto, this.headers);
+            ResponseEntity<Boolean> response = this.restTemplate
+                .exchange(raspayHost+paymentUrl, HttpMethod.POST, request, Boolean.class);
+            return response.getBody();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     
