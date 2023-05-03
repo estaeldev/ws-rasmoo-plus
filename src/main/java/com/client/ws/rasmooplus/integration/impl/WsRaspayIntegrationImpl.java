@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.client.ws.rasmooplus.dto.wsraspay.CustomerDto;
 import com.client.ws.rasmooplus.dto.wsraspay.OrderDto;
 import com.client.ws.rasmooplus.dto.wsraspay.PaymentDto;
+import com.client.ws.rasmooplus.exception.WsRaspayException;
 import com.client.ws.rasmooplus.integration.WsRaspayIntegration;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
                 HttpMethod.POST, request, CustomerDto.class);
             return response.getBody();
         } catch (Exception e) {
-            throw e;
+            throw new WsRaspayException(e.getMessage());
         }
     }
 
@@ -52,7 +53,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
                 .exchange(raspayHost+orderUrl, HttpMethod.POST, request, OrderDto.class);
             return response.getBody();
         } catch (Exception e) {
-            throw e;
+            throw new WsRaspayException(e.getMessage());
         }
 
     }
@@ -65,10 +66,10 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
                 .exchange(raspayHost+paymentUrl, HttpMethod.POST, request, Boolean.class);
             return response.getBody();
         } catch (Exception e) {
-            throw e;
+            throw new WsRaspayException(e.getMessage());
         }
     }
-
+    
     
     private HttpHeaders getHttpHeaders() {
         String crendential = "rasmooplus:r@sm00";

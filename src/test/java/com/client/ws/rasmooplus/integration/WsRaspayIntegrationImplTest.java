@@ -11,6 +11,7 @@ import com.client.ws.rasmooplus.dto.wsraspay.CreditCardDto;
 import com.client.ws.rasmooplus.dto.wsraspay.CustomerDto;
 import com.client.ws.rasmooplus.dto.wsraspay.OrderDto;
 import com.client.ws.rasmooplus.dto.wsraspay.PaymentDto;
+import com.client.ws.rasmooplus.exception.WsRaspayException;
 
 @SpringBootTest
 class WsRaspayIntegrationImplTest {
@@ -48,6 +49,34 @@ class WsRaspayIntegrationImplTest {
 
         Boolean processPaymentResult = this.wsRaspayIntegration.processPayment(paymentDto);
         Assertions.assertTrue(processPaymentResult);
+    }
+    
+    @Test
+    void createCustomerWhenDtoFailure() {
+        CustomerDto customerDto = new CustomerDto("", "teste@teste.com", "Estael", null, "Meireles");
+        Assertions.assertThrows(WsRaspayException.class, () -> this.wsRaspayIntegration.createCustomer(customerDto));
+    }
+
+    @Test
+    void createOrderWhenDtoFailure() {
+        OrderDto orderDto = new OrderDto("", BigDecimal.ZERO, null, "MONTH22");
+        Assertions.assertThrows(WsRaspayException.class, () -> this.wsRaspayIntegration.createOrder(orderDto));
+    }
+
+    @Test
+    void processPaymentWhenDtoFailure() {
+        CreditCardDto creditCardDto = new CreditCardDto(123, 
+                                                        "20228920035", 
+                                                        0,
+                                                        06, 
+                                                        "1234123412341234", 
+                                                        2025);
+
+        PaymentDto paymentDto = new PaymentDto(creditCardDto, 
+                                                "643dbe8146ed7735da5cccd7", 
+                                                "");
+
+        Assertions.assertThrows(WsRaspayException.class, () -> this.wsRaspayIntegration.processPayment(paymentDto) );
     }
     
 
