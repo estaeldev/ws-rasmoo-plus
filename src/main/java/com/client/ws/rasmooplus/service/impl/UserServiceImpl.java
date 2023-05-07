@@ -3,12 +3,15 @@ package com.client.ws.rasmooplus.service.impl;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import com.client.ws.rasmooplus.dto.UserDto;
 import com.client.ws.rasmooplus.dto.UserTypeDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
+import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.mapper.UserMapper;
 import com.client.ws.rasmooplus.mapper.UserTypeMapper;
 import com.client.ws.rasmooplus.model.User;
@@ -35,6 +38,13 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Long id) {
         return null;
         
+    }
+
+    @Override
+    public UserDto findById(UUID id) {
+        Optional<User> userOptional = this.userRepository.findById(id);
+        return userOptional.map(UserMapper::fromEntityToDto)
+            .orElseThrow(() -> new NotFoundException("Error! User: usuario não encontrado."));
     }
 
     @Override

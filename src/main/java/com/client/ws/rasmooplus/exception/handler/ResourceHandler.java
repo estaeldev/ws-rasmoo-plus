@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.client.ws.rasmooplus.dto.error.ErrorResponseDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
+import com.client.ws.rasmooplus.exception.BusinessException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.exception.WsRaspayException;
 
@@ -76,6 +77,16 @@ public class ResourceHandler {
             .statusCode(HttpStatus.BAD_REQUEST.value())
             .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponseDto> businessException(BusinessException exception) {
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+            .message(exception.getMessage())
+            .httpStatus(HttpStatus.CONFLICT)
+            .statusCode(HttpStatus.CONFLICT.value())
+            .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponseDto);
     }
     
 }
