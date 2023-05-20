@@ -11,6 +11,7 @@ import com.client.ws.rasmooplus.dto.wsraspay.CustomerDto;
 import com.client.ws.rasmooplus.dto.wsraspay.OrderDto;
 import com.client.ws.rasmooplus.exception.BusinessException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
+import com.client.ws.rasmooplus.integration.MailIntegration;
 import com.client.ws.rasmooplus.integration.WsRaspayIntegration;
 import com.client.ws.rasmooplus.mapper.UserPaymentInfoMapper;
 import com.client.ws.rasmooplus.mapper.wsraspay.CreditCardMapper;
@@ -32,6 +33,7 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
     private final UserRepository userRepository;
     private final UserPaymentInfoRepository userPaymentInfoRepository;
     private final WsRaspayIntegration wsRaspayIntegration;
+    private final MailIntegration mailIntegration;
 
     @Override
     public Boolean process(PaymentProcessDto dto) {
@@ -49,16 +51,16 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
             Boolean processPayment = this.wsRaspayIntegration.processPayment(PaymentMapper.build(creditCardDto, orderDto));
 
             if(Boolean.TRUE.equals(processPayment)) {
+                this.mailIntegration.send(user.getEmail(), 
+                    "Usuario: "+ user.getEmail() +" - Senha: alunorasmoo","ACESSO LIBERADO!");
+
+                UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(), user);
+                this.userPaymentInfoRepository.save(userPaymentInfo);
                 return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
             }
             
-            UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(), user);
-            this.userPaymentInfoRepository.save(userPaymentInfo);
-
-
-
-            return Boolean.TRUE;
-
         }).orElseThrow(() -> new NotFoundException("Error! User: usuário não encontrado"));
 
     }
