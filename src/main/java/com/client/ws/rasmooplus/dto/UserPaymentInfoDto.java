@@ -36,7 +36,7 @@ public class UserPaymentInfoDto {
 
     private BigDecimal price;
 
-    private Integer instalments;
+    private Integer installments;
 
     @Default
     private LocalDate dtPayment = LocalDate.now();

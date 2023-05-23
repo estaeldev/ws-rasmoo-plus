@@ -51,15 +51,17 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
             Boolean processPayment = this.wsRaspayIntegration.processPayment(PaymentMapper.build(creditCardDto, orderDto));
 
             if(Boolean.TRUE.equals(processPayment)) {
+                UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(), user);
+                this.userPaymentInfoRepository.save(userPaymentInfo);
+
                 this.mailIntegration.send(user.getEmail(), 
                     "Usuario: "+ user.getEmail() +" - Senha: alunorasmoo","ACESSO LIBERADO!");
 
-                UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(), user);
-                this.userPaymentInfoRepository.save(userPaymentInfo);
                 return Boolean.TRUE;
-            } else {
-                return Boolean.FALSE;
             }
+
+            return Boolean.FALSE;
+            
             
         }).orElseThrow(() -> new NotFoundException("Error! User: usuário não encontrado"));
 

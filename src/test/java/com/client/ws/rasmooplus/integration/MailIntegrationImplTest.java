@@ -13,7 +13,7 @@ class MailIntegrationImplTest {
 
     @Test
     void sendMailWhenOk() {
-        mailIntegration.send("taelmeireles98@gmail.com", "Olá Gmail", "ACESSO LIBERADO!");
+        mailIntegration.send("hakide4006@glumark.com", "Olá Gmail", "ACESSO LIBERADO!");
 
         Assertions.assertTrue(true);
     }

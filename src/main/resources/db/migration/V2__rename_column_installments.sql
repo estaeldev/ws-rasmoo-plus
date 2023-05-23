@@ -1,0 +1,1 @@
+ALTER TABLE public.user_payment_info RENAME instalments TO installments;

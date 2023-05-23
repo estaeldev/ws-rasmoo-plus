@@ -11,7 +11,7 @@ public class CreditCardMapper {
         return CreditCardDto.builder()
             .cvv(Integer.parseInt(dto.getCardSecurityCode()))
             .documentNumber(cpf)
-            .installments(dto.getInstalments())
+            .installments(dto.getInstallments())
             .month(dto.getCardExpirationMonth())
             .number(dto.getCardNumber())
             .year(dto.getCardExpirationYear())

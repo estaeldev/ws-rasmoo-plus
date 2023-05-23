@@ -44,13 +44,14 @@ public class UserPaymentInfo implements Serializable {
     private String cardSecurityCode;
 
     private BigDecimal price;
-    private Integer instalments;
+
+    private Integer installments;
 
     @Column(name = "dt_payment")
     private LocalDate dtPayment;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
 }
