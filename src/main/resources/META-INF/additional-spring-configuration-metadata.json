@@ -18,5 +18,15 @@
     "name": "webservices.raspay.v1.payment",
     "type": "java.lang.String",
     "description": "A description for 'webservices.raspay.v1.payment'"
+  },
+  {
+    "name": "webservices.rasplus.jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'webservices.rasplus.jwt.secret'"
+  },
+  {
+    "name": "webservices.rasplus.jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'webservices.rasplus.jwt.expiration'"
   }
 ]}
