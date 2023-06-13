@@ -15,8 +15,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.client.ws.rasmooplus.repository.UserCredentialsRepository;
+import com.client.ws.rasmooplus.service.TokenService;
 import com.client.ws.rasmooplus.service.impl.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -27,20 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig {
 
     private final UserCredentialsRepository userCredentialsRepository;
-
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.httpBasic(Customizer.withDefaults()).csrf(csrf -> csrf.disable());
-
-        http.authorizeHttpRequests( authorize -> authorize
-            .requestMatchers(HttpMethod.GET, "/subscription-type", "/subscription-type/*").permitAll()
-            .requestMatchers("/auth/**").permitAll()
-            .anyRequest().authenticated());
-
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
-    }
+    private final TokenService tokenService;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -63,6 +52,24 @@ public class WebSecurityConfig {
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.httpBasic(Customizer.withDefaults()).csrf(csrf -> csrf.disable());
+
+        http.authorizeHttpRequests( authorize -> authorize
+            .requestMatchers(HttpMethod.GET, "/subscription-type", "/subscription-type/*").permitAll()
+            .requestMatchers("/auth/**").permitAll()
+            .anyRequest().authenticated());
+
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(new JwtAuthenticationFilter(
+                    tokenService, userDetailsService()), UsernamePasswordAuthenticationFilter.class);
+            
+
+        return http.build();
     }
     
 }
