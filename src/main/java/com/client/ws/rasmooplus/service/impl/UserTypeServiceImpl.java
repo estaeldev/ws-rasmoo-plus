@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.client.ws.rasmooplus.dto.UserTypeDto;
 import com.client.ws.rasmooplus.exception.NotFoundException;
@@ -14,6 +15,7 @@ import com.client.ws.rasmooplus.service.UserTypeService;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class UserTypeServiceImpl implements UserTypeService {
@@ -33,16 +35,19 @@ public class UserTypeServiceImpl implements UserTypeService {
             .orElseThrow(() -> new NotFoundException("Error! UserType: userType não encontrado."));
     }
 
+    @Transactional
     @Override
     public UserTypeDto create(UserTypeDto modelDto) {
         throw new UnsupportedOperationException("Unimplemented method 'create'");
     }
 
+    @Transactional
     @Override
     public UserTypeDto update(Long id, UserTypeDto modelDto) {
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
+    @Transactional
     @Override
     public Void deleteById(Long id) {
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");

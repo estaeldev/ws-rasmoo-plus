@@ -51,9 +51,9 @@ public class TokenServiceImpl implements TokenService{
     }
 
     @Override
-    public Boolean isValidToken(String token, String username) {
+    public Boolean isValidToken(String token, UserDetails userDetails) {
         String usernameToken = getUsername(token);
-        return (usernameToken.equals(username) && !isTokenExpired(token));
+        return (usernameToken.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private Boolean isTokenExpired(String token) {

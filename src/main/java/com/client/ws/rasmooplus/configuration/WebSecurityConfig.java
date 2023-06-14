@@ -56,18 +56,22 @@ public class WebSecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.httpBasic(Customizer.withDefaults()).csrf(csrf -> csrf.disable());
-
+        
         http.authorizeHttpRequests( authorize -> authorize
-            .requestMatchers(HttpMethod.GET, "/subscription-type", "/subscription-type/*").permitAll()
-            .requestMatchers("/auth/**").permitAll()
-            .anyRequest().authenticated());
-
+        .requestMatchers(HttpMethod.GET, "/subscription-type", "/subscription-type/*").permitAll()
+        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+        .requestMatchers(HttpMethod.POST, "/payment/*").permitAll()
+        .requestMatchers("/auth/**").permitAll()
+        .anyRequest().authenticated());
+        
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(new JwtAuthenticationFilter(
-                    tokenService, userDetailsService()), UsernamePasswordAuthenticationFilter.class);
+        .authenticationProvider(authenticationProvider())
+        .addFilterBefore(new JwtAuthenticationFilter(
+            tokenService, userDetailsService()), UsernamePasswordAuthenticationFilter.class);
             
+        http.httpBasic(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .formLogin(Customizer.withDefaults());
 
         return http.build();
     }

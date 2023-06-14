@@ -8,5 +8,5 @@ public interface TokenService {
     String getUsername(String token);
     String getToken(Map<String, Object> claims, UserDetails userDetails);    
     String getToken(UserDetails userDetails);
-    Boolean isValidToken(String token, String username);
+    Boolean isValidToken(String token, UserDetails userDetails);
 }
