@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +26,14 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
 
     private final SubscriptionTypeRepository subscriptionTypeRepository;
 
+    @Cacheable(value = "SubscriptionType")
     @Override
     public List<SubscriptionTypeDto> findAll() {
         List<SubscriptionType> subscriptionTypeList = this.subscriptionTypeRepository.findAll();
         return subscriptionTypeList.stream().map(SubscriptionTypeMapper::fromEntityToDto).toList();
     }
 
+    @Cacheable(value = "SubscriptionType", key = "#id")
     @Override
     public SubscriptionTypeDto findById(Long id) {
         Optional<SubscriptionType> subscriptionTypeOptional = this.subscriptionTypeRepository.findById(id);
@@ -48,6 +52,7 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
             
     }
 
+    @CacheEvict(value = "SubscriptionType", allEntries = true)
     @Override
     public SubscriptionTypeDto create(SubscriptionTypeDto modelDto) {
         if(Objects.nonNull(modelDto.getId())) {
@@ -57,6 +62,7 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
         return SubscriptionTypeMapper.fromEntityToDto(saved);
     }
 
+    @CacheEvict(value = "SubscriptionType", allEntries = true)
     @Override
     public SubscriptionTypeDto update(Long id, SubscriptionTypeDto modelDto) {
         if(Objects.nonNull(findById(id))) {
@@ -68,6 +74,7 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
         return null;
     }
 
+    @CacheEvict(value = "SubscriptionType", allEntries = true)
     @Override
     public Void deleteById(Long id) {
         if(Objects.nonNull(findById(id))) {

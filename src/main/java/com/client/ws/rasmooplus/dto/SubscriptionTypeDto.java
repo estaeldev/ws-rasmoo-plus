@@ -1,5 +1,6 @@
 package com.client.ws.rasmooplus.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import org.springframework.hateoas.RepresentationModel;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SubscriptionTypeDto extends RepresentationModel<SubscriptionTypeDto> {
+public class SubscriptionTypeDto extends RepresentationModel<SubscriptionTypeDto> implements Serializable {
     
     private Long id;
 
