@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.integration;
+package com.client.ws.rasmooplus.service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,17 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MailIntegrationImplTest {
-
+class UserServiceTest {
+    
     @Autowired
-    private MailIntegration mailIntegration;
+    private UserService userService;
+
 
     @Test
-    void sendMailWhenOk() {
-        mailIntegration.send("hakide4006@glumark.com", "Olá Gmail", "ACESSO LIBERADO!");
-
+    void contextLoads() {
+        this.userService.sendRecoveryCode("");
         Assertions.assertTrue(true);
     }
-
     
+
 }

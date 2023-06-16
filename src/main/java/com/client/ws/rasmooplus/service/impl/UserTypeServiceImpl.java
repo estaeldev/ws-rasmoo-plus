@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.client.ws.rasmooplus.dto.UserTypeDto;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.mapper.UserTypeMapper;
-import com.client.ws.rasmooplus.model.UserType;
-import com.client.ws.rasmooplus.repository.UserTypeRepository;
+import com.client.ws.rasmooplus.model.jpa.UserType;
+import com.client.ws.rasmooplus.repository.jpa.UserTypeRepository;
 import com.client.ws.rasmooplus.service.UserTypeService;
 
 import lombok.RequiredArgsConstructor;

@@ -6,4 +6,6 @@ import com.client.ws.rasmooplus.dto.UserDto;
 
 public interface UserService extends JpaRepositoryModel<UserDto> {
     UserDto findById(UUID id);
+
+    Object sendRecoveryCode(String email);
 }

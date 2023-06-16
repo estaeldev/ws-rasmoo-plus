@@ -1,7 +1,6 @@
-package com.client.ws.rasmooplus.model;
+package com.client.ws.rasmooplus.model.jpa;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,27 +14,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "subscriptions_type")
-public class SubscriptionType implements Serializable {
-    
+@Table(name = "user_type")
+public class UserType implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "subscriptions_type_id")
+    @Column(name = "user_type_id")
     private Long id;
 
     private String name;
 
-    @Column(name = "access_months")
-    private Integer accessMonths;
-
-    private BigDecimal price;
-
-    @Column(name = "product_key", unique = true)
-    private String productKey;
+    private String description;
 
 
 }

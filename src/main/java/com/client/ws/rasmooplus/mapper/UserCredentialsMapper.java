@@ -3,9 +3,9 @@ package com.client.ws.rasmooplus.mapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.client.ws.rasmooplus.dto.RegisterDto;
-import com.client.ws.rasmooplus.model.User;
-import com.client.ws.rasmooplus.model.UserCredentials;
-import com.client.ws.rasmooplus.model.UserType;
+import com.client.ws.rasmooplus.model.jpa.User;
+import com.client.ws.rasmooplus.model.jpa.UserCredentials;
+import com.client.ws.rasmooplus.model.jpa.UserType;
 
 public class UserCredentialsMapper {
     

@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.client.ws.rasmooplus.repository.UserCredentialsRepository;
+import com.client.ws.rasmooplus.repository.jpa.UserCredentialsRepository;
 import com.client.ws.rasmooplus.service.TokenService;
 import com.client.ws.rasmooplus.service.impl.UserDetailsServiceImpl;
 

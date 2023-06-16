@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.client.ws.rasmooplus.exception.NotFoundException;
-import com.client.ws.rasmooplus.repository.UserCredentialsRepository;
+import com.client.ws.rasmooplus.repository.jpa.UserCredentialsRepository;
 
 import lombok.RequiredArgsConstructor;
 

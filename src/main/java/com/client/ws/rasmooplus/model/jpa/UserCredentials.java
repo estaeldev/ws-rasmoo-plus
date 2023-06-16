@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.model;
+package com.client.ws.rasmooplus.model.jpa;
 
 import java.util.Collection;
 import java.util.List;
