@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -16,9 +15,7 @@ import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.mapper.UserMapper;
 import com.client.ws.rasmooplus.mapper.UserTypeMapper;
 import com.client.ws.rasmooplus.model.jpa.User;
-import com.client.ws.rasmooplus.model.redis.RecoveryCode;
 import com.client.ws.rasmooplus.repository.jpa.UserRepository;
-import com.client.ws.rasmooplus.repository.redis.RecoveryCodeRepository;
 import com.client.ws.rasmooplus.service.UserService;
 import com.client.ws.rasmooplus.service.UserTypeService;
 
@@ -30,7 +27,6 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final UserTypeService userTypeService;
-    private final RecoveryCodeRepository recoveryCodeRepository;
     
     @Override
     public List<UserDto> findAll() {
@@ -73,17 +69,6 @@ public class UserServiceImpl implements UserService{
     public Void deleteById(Long id) {
         return null;
     }
-
-    @Override
-    public Object sendRecoveryCode(String email) {
-        String code = String.format("%06d", new Random(0).nextInt(10000));
-        this.recoveryCodeRepository.save(RecoveryCode.builder().code(code).build());
-        
-
-        return null;
-    }
-
-    
 
     
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -17,11 +18,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @RedisHash("recovery_code")
-public class RecoveryCode implements Serializable {
+public class UserRecoveryCode implements Serializable {
     
     @Id
     private UUID id;
 
+    @Indexed
     private String email;
 
     private String code;
