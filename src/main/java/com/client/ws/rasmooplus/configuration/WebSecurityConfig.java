@@ -17,9 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.client.ws.rasmooplus.integration.MailIntegration;
 import com.client.ws.rasmooplus.repository.jpa.UserCredentialsRepository;
-import com.client.ws.rasmooplus.repository.redis.UserRecoveryCodeRepository;
 import com.client.ws.rasmooplus.service.TokenService;
 import com.client.ws.rasmooplus.service.impl.UserDetailsServiceImpl;
 
@@ -32,8 +30,6 @@ public class WebSecurityConfig {
 
     private final UserCredentialsRepository userCredentialsRepository;
     private final TokenService tokenService;
-    private final UserRecoveryCodeRepository userRecoveryCodeRepository;
-    private final MailIntegration mailIntegration;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -42,7 +38,7 @@ public class WebSecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl(userCredentialsRepository, userRecoveryCodeRepository, mailIntegration);
+        return new UserDetailsServiceImpl(userCredentialsRepository);
     }
 
     @Bean
@@ -65,7 +61,8 @@ public class WebSecurityConfig {
         .requestMatchers("/subscription-type", "/subscription-type/*").permitAll()
         .requestMatchers(HttpMethod.POST, "/users").permitAll()
         .requestMatchers(HttpMethod.POST, "/payment/*").permitAll()
-        .requestMatchers("/auth/**").permitAll()
+        .requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
+        .requestMatchers("/auth/recovery-code/*").permitAll()
         .anyRequest().authenticated());
         
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
