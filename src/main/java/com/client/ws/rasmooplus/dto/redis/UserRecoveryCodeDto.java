@@ -20,4 +20,6 @@ public class UserRecoveryCodeDto {
     @NotBlank
     private String code;
 
+    private String password;
+
 }

@@ -1,9 +1,11 @@
 package com.client.ws.rasmooplus.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +36,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
+
+    @Value("${webservices.rasplus.redis.default.recoverycode.timeout}")
+    private String recoveryCodeTimeout;
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
@@ -105,7 +110,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Optional<UserRecoveryCode> userRecoveryCodeOpt = this.userRecoveryCodeRepository.findByEmail(dto.getEmail());
         return userRecoveryCodeOpt.map(userRecoveryCode -> {
 
-            if(dto.getCode().equals(userRecoveryCode.getCode())) {
+            LocalDateTime timeout = userRecoveryCode.getCreateDate().plusMinutes(Long.parseLong(recoveryCodeTimeout));
+            LocalDateTime timenow = LocalDateTime.now();
+            
+            if(dto.getCode().equals(userRecoveryCode.getCode()) && timenow.isBefore(timeout)) {
                 return Boolean.TRUE;
             }
 
@@ -113,5 +121,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         }).orElseThrow(() -> new BadRequestException("email inválido!"));
     }
-   
+
+    @Override
+    public void updatePasswordByRecoveryCode(UserRecoveryCodeDto dto) {
+        
+        if(Boolean.TRUE.equals(recoveryCodeIsValid(dto)) && Objects.nonNull(dto.getPassword())) {
+            Optional<UserCredentials> userCredentialsOpt = this.userCredentialsRepository.findByUsername(dto.getEmail());
+            userCredentialsOpt.ifPresent(userCredentials -> {
+                userCredentials.setPassword(this.passwordEncoder.encode(dto.getPassword()));
+                this.userCredentialsRepository.save(userCredentials);
+            });
+            return;
+        }
+
+        throw new BadRequestException("codigo invalido ou password nulo!");
+
+    }
+    
 }
