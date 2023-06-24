@@ -1,6 +1,5 @@
 package com.client.ws.rasmooplus.service.impl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -9,35 +8,34 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.client.ws.rasmooplus.dto.UserDto;
-import com.client.ws.rasmooplus.dto.UserTypeDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.mapper.UserMapper;
-import com.client.ws.rasmooplus.mapper.UserTypeMapper;
 import com.client.ws.rasmooplus.model.jpa.User;
+import com.client.ws.rasmooplus.model.jpa.UserType;
 import com.client.ws.rasmooplus.repository.jpa.UserRepository;
+import com.client.ws.rasmooplus.repository.jpa.UserTypeRepository;
 import com.client.ws.rasmooplus.service.UserService;
-import com.client.ws.rasmooplus.service.UserTypeService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserTypeService userTypeService;
+    private final UserTypeRepository userTypeRepository;
     
     @Override
     public List<UserDto> findAll() {
-        
-        return Collections.emptyList();
+        List<User> userList = this.userRepository.findAll();
+        return userList.stream().map(UserMapper::fromEntityToDto).toList();
     }
 
     @Override
     public UserDto findById(Long id) {
         return null;
-        
+
     }
 
     @Override
@@ -49,14 +47,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto create(UserDto modelDto) {
+
         if(Objects.nonNull(modelDto.getId())) {
             throw new BadRequestException("Error! User: id deve ser nulo.");
         }
-        UserTypeDto userTypeDto = userTypeService.findById(modelDto.getUserTypeId());
 
-        User user = UserMapper.fromDtoToEntity(modelDto, UserTypeMapper.fromDtoToEntity(userTypeDto), null);
-        this.userRepository.save(user);
-        return UserMapper.fromEntityToDto(user);
+        Optional<UserType> userTypeOpt = this.userTypeRepository.findById(modelDto.getUserTypeId());
+
+        return userTypeOpt.map(userType -> {
+            User user = UserMapper.fromDtoToEntity(modelDto, userType, null);
+            this.userRepository.save(user);
+            return UserMapper.fromEntityToDto(user);
+
+        }).orElseThrow(() -> new NotFoundException("UserType não encontrado."));
+
     }
     
     @Override
