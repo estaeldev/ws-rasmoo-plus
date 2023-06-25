@@ -137,5 +137,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         throw new BadRequestException("codigo invalido ou password nulo!");
 
     }
+
+    
     
 }
