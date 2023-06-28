@@ -22,6 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.client.ws.rasmooplus.dto.redis.UserRecoveryCodeDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
+import com.client.ws.rasmooplus.exception.NotFoundException;
+import com.client.ws.rasmooplus.integration.MailIntegration;
 import com.client.ws.rasmooplus.model.jpa.UserCredentials;
 import com.client.ws.rasmooplus.model.jpa.UserType;
 import com.client.ws.rasmooplus.model.redis.UserRecoveryCode;
@@ -40,6 +42,9 @@ class AuthenticationServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private MailIntegration mailIntegration;
 
     @InjectMocks
     private AuthenticationServiceImpl authenticationServiceImpl;
@@ -84,6 +89,73 @@ class AuthenticationServiceTest {
         
     }
 
+    @Test
+    void sendRecoveryCode_when_EmailIsEmptyAndUserCredentialsIsNotEmpty_then_returnVoid() {
+
+        when(this.userRecoveryCodeRepository.findByEmail(userRecoveryCodeDto.getEmail()))
+            .thenReturn(Optional.empty());
+
+        when(this.userCredentialsRepository.findByUsername(userRecoveryCodeDto.getEmail()))
+            .thenReturn(Optional.of(userCredentials));
+
+        when(this.userRecoveryCodeRepository.save(any())).thenReturn(any());
+
+        Assertions.assertDoesNotThrow(() -> this.authenticationServiceImpl.sendRecoveryCode(userRecoveryCodeDto.getEmail()));
+
+        verify(this.userRecoveryCodeRepository, times(1))
+            .findByEmail(userRecoveryCodeDto.getEmail());
+
+        verify(this.userCredentialsRepository, times(1))
+            .findByUsername(userRecoveryCodeDto.getEmail());
+
+        verify(this.userRecoveryCodeRepository, times(1)).save(any());
+        
+        verify(this.mailIntegration, times(1)).send(any(), any(), any());
+
+    }
+
+    @Test
+    void sendRecoveryCode_when_EmailIsNotEmpty_then_returnVoid() {
+
+        when(this.userRecoveryCodeRepository.findByEmail(userRecoveryCodeDto.getEmail()))
+            .thenReturn(Optional.of(userRecoveryCode));
+
+        when(this.userRecoveryCodeRepository.save(any())).thenReturn(any());
+
+        Assertions.assertDoesNotThrow(() -> this.authenticationServiceImpl.sendRecoveryCode(userRecoveryCodeDto.getEmail()));
+
+        verify(this.userRecoveryCodeRepository, times(1))
+            .findByEmail(userRecoveryCodeDto.getEmail());
+
+        verify(this.userCredentialsRepository, times(0))
+            .findByUsername(userRecoveryCodeDto.getEmail());
+
+        verify(this.userRecoveryCodeRepository, times(1)).save(any());
+        
+    }
+
+    @Test
+    void sendRecoveryCode_when_EmailIsEmptyAndUserCredentialsIsEmpty_then_returnNotFoundException() {
+
+        when(this.userRecoveryCodeRepository.findByEmail(any()))
+            .thenReturn(Optional.empty());
+
+        when(this.userCredentialsRepository.findByUsername(any()))
+            .thenReturn(Optional.empty());
+
+        Assertions.assertEquals("Usuario não encontrado!", Assertions.assertThrows(
+            NotFoundException.class, 
+            () -> this.authenticationServiceImpl.sendRecoveryCode("")).getMessage());
+
+        verify(this.userRecoveryCodeRepository, times(1))
+            .findByEmail(any());
+
+        verify(this.userCredentialsRepository, times(1))
+            .findByUsername(any());
+
+        verify(this.userRecoveryCodeRepository, times(0)).save(any());
+        
+    }
 
     @Test
     void recoveryCodeIsValid_when_EmailIsNotNull_then_returnTrue() {

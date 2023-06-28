@@ -30,7 +30,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
     @Value("${webservices.raspay.v1.payment}")
     private String paymentUrl;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final HttpHeaders headers = getHttpHeaders();
 
     @Override
