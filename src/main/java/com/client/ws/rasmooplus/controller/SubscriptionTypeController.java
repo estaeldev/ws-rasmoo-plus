@@ -46,7 +46,7 @@ public class SubscriptionTypeController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SubscriptionTypeDto> update(@PathVariable("id") final Long id, @RequestBody final SubscriptionTypeDto dto ) {
+    public ResponseEntity<SubscriptionTypeDto> update(@PathVariable("id") final Long id, @Valid @RequestBody final SubscriptionTypeDto dto ) {
         SubscriptionTypeDto subscriptionTypeDtoUpdate = this.subscriptionTypeService.update(id, dto);
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeDtoUpdate);
     }
