@@ -3,6 +3,7 @@ package com.client.ws.rasmooplus.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,31 +27,31 @@ public class SubscriptionTypeController {
 
     private final SubscriptionTypeService subscriptionTypeService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<SubscriptionTypeDto>> findAll() {
         List<SubscriptionTypeDto> subscriptionTypeDtoList = this.subscriptionTypeService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeDtoList);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SubscriptionTypeDto> findById(@PathVariable("id") final Long id) {
         SubscriptionTypeDto subscriptionTypeDto = this.subscriptionTypeService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeDto);
     }
     
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SubscriptionTypeDto> create(@Valid @RequestBody final SubscriptionTypeDto subscriptionTypeDto) {
         SubscriptionTypeDto subscriptionTypeCreate = this.subscriptionTypeService.create(subscriptionTypeDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeCreate);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SubscriptionTypeDto> update(@PathVariable("id") final Long id, @RequestBody final SubscriptionTypeDto dto ) {
         SubscriptionTypeDto subscriptionTypeDtoUpdate = this.subscriptionTypeService.update(id, dto);
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeDtoUpdate);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable("id") final Long id) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(this.subscriptionTypeService.deleteById(id));
     }
