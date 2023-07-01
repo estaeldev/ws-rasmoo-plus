@@ -1,6 +1,7 @@
 package com.client.ws.rasmooplus.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
     
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> create(@Valid @RequestBody final UserDto userDto) {
         UserDto userDtoCreated = this.userService.create(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDtoCreated);
