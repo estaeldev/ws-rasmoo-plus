@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
+import java.io.FileInputStream;
 import java.util.UUID;
 
 import org.hamcrest.Matchers;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -95,6 +97,20 @@ class UserControllerTest {
 
     }
 
+    @Test
+    void testUploadPhoto_when_receiveMultPartFile_then_return200OK() throws Exception {
+        String uuid = UUID.randomUUID().toString();
 
+        FileInputStream file = new FileInputStream("src/test/resources/static/avatar.png");
+
+        MockMultipartFile multipartFile = new MockMultipartFile(
+            "file", "avatar.pgn", MediaType.MULTIPART_FORM_DATA_VALUE, file);
+        
+        this.mockMvc.perform(MockMvcRequestBuilders.multipart("/users/{id}/upload-photo", uuid)
+            .file(multipartFile)
+            )
+            .andExpect(MockMvcResultMatchers.status().isOk());
+        
+    }
 
 }
