@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,12 +33,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDtoCreated);
     }   
 
-    @PostMapping(value = "/{id}/upload-photo", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadPhoto(@PathVariable("id") final UUID id, @RequestPart("file") final MultipartFile file) {
-        
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    @PatchMapping(value = "/{id}/upload-photo", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserDto> uploadPhoto(@PathVariable("id") final UUID id, @RequestPart("file") final MultipartFile file) {
+        UserDto userDto = this.userService.uploadPhoto(id, file);
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
-
+    
 
 
 }

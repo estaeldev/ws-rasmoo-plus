@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.client.ws.rasmooplus.dto.UserDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
@@ -71,6 +72,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Void deleteById(Long id) {
+        return null;
+    }
+
+    @Override
+    public UserDto uploadPhoto(UUID id, MultipartFile file) {
+        
         return null;
     }
 

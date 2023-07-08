@@ -16,10 +16,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -99,17 +101,26 @@ class UserControllerTest {
 
     @Test
     void testUploadPhoto_when_receiveMultPartFile_then_return200OK() throws Exception {
-        String uuid = UUID.randomUUID().toString();
-
+        UUID uuid = UUID.randomUUID();
         FileInputStream file = new FileInputStream("src/test/resources/static/avatar.png");
 
         MockMultipartFile multipartFile = new MockMultipartFile(
             "file", "avatar.pgn", MediaType.MULTIPART_FORM_DATA_VALUE, file);
+
+        Mockito.when(this.userService.uploadPhoto(uuid, multipartFile)).thenReturn(new UserDto());
         
-        this.mockMvc.perform(MockMvcRequestBuilders.multipart("/users/{id}/upload-photo", uuid)
-            .file(multipartFile)
-            )
+        MockMultipartHttpServletRequestBuilder builder = 
+            MockMvcRequestBuilders.multipart("/users/{id}/upload-photo", uuid).file(multipartFile);
+
+        builder.with(request -> {
+                request.setMethod(HttpMethod.PATCH.name());
+                return request;
+        });
+
+        this.mockMvc.perform(builder)
             .andExpect(MockMvcResultMatchers.status().isOk());
+        
+        Mockito.verify(this.userService, times(1)).uploadPhoto(any(), any());
         
     }
 
