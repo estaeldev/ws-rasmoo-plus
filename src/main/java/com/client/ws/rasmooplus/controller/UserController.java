@@ -1,5 +1,6 @@
 package com.client.ws.rasmooplus.controller;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class UserController {
     }   
 
     @PatchMapping(value = "/{id}/upload-photo", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserDto> uploadPhoto(@PathVariable("id") final UUID id, @RequestPart("file") final MultipartFile file) {
+    public ResponseEntity<UserDto> uploadPhoto(@PathVariable("id") final UUID id, @RequestPart("file") final MultipartFile file) throws IOException {
         UserDto userDto = this.userService.uploadPhoto(id, file);
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }

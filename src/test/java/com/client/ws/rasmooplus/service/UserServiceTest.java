@@ -1,18 +1,24 @@
 package com.client.ws.rasmooplus.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
+import java.io.FileInputStream;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import com.client.ws.rasmooplus.dto.UserDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
@@ -25,6 +31,7 @@ import com.client.ws.rasmooplus.repository.jpa.UserTypeRepository;
 import com.client.ws.rasmooplus.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
+@TestInstance(Lifecycle.PER_CLASS)
 class UserServiceTest {
 
     @Mock
@@ -36,20 +43,20 @@ class UserServiceTest {
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
-    private static UserDto userDto;
+    private UserDto userDto;
 
-    private static UserType userType;
+    private UserType userType;
 
     @BeforeAll
-    static void loadDefault() {
-        userDto = UserDto.builder()
+    void loadDefault() {
+        this.userDto = UserDto.builder()
             .id(UUID.randomUUID())
             .email("tael@gmail.com")
             .cpf("123456789123")
             .userTypeId(1L)
             .build();
 
-        userType = UserType.builder()
+        this.userType = UserType.builder()
             .id(1L)
             .name("Aluno")
             .description("Aluno da plataforma")
@@ -99,6 +106,34 @@ class UserServiceTest {
         Mockito.verify(this.userRepository, times(0)).save(Mockito.any());
 
     }
+
+
+    @Test
+    void testUploadPhoto_when_thereIsUserAndFileAndItIsPNGorJPEG_then_updatePhotoAndReturnUser() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        userDto.setId(uuid);
+
+        User user = UserMapper.fromDtoToEntity(userDto, userType, null);
+
+        FileInputStream file = new FileInputStream("src/test/resources/static/avatar.png");
+
+        MockMultipartFile multipartFile = new MockMultipartFile(
+            "file", "avatar.png", MediaType.MULTIPART_FORM_DATA_VALUE, file);
+        
+        Mockito.when(this.userRepository.findById(uuid)).thenReturn(Optional.of(user));
+
+        UserDto userReturned = this.userServiceImpl.uploadPhoto(uuid, multipartFile);
+
+        Assertions.assertNotNull(userReturned);
+        Assertions.assertNotNull(userReturned.getPhoto());
+        Assertions.assertNotNull(userReturned.getPhotoName());
+
+        Assertions.assertEquals("avatar.png", userReturned.getPhotoName());
+        
+        Mockito.verify(this.userRepository, times(1)).findById(any());
+
+    }
+
 
 }
 

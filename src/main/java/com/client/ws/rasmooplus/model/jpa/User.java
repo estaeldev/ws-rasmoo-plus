@@ -42,6 +42,11 @@ public class User implements Serializable {
     @Column(unique = true)
     private String cpf;
 
+    @Column(name = "photo_name")
+    private String photoName;
+    
+    private byte[] photo;
+
     @Column(name = "dt_subscription")
     private LocalDate dtSubscription;
 

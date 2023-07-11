@@ -1,5 +1,6 @@
 package com.client.ws.rasmooplus.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -76,10 +77,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto uploadPhoto(UUID id, MultipartFile file) {
+    public UserDto uploadPhoto(UUID id, MultipartFile file) throws IOException  {
+        UserDto userDto = findById(id);
         
-        return null;
+        userDto.setPhotoName(file.getOriginalFilename());
+        userDto.setPhoto(file.getBytes());
+        
+        return userDto;
     }
 
-    
+
 }

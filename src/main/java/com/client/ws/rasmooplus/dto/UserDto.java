@@ -34,6 +34,10 @@ public class UserDto {
     
     @CPF(message = "inválido")
     private String cpf;
+    
+    private String photoName;
+    
+    private byte[] photo;
 
     @Builder.Default
     private LocalDate dtSubscription = LocalDate.now();
