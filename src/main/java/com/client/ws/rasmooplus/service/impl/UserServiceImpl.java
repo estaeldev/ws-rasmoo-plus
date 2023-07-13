@@ -25,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final String PNG = ".png";
+    private static final String JPEG = ".jpeg";
+
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
     
@@ -78,12 +81,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto uploadPhoto(UUID id, MultipartFile file) throws IOException  {
-        UserDto userDto = findById(id);
-        
-        userDto.setPhotoName(file.getOriginalFilename());
-        userDto.setPhoto(file.getBytes());
-        
-        return userDto;
+        String fileName = file.getOriginalFilename();
+
+        if(Objects.nonNull(fileName)) {
+            String extention = fileName.substring(fileName.indexOf("."));
+
+            if(extention.startsWith(JPEG) || extention.startsWith(PNG)) {
+                UserDto userDto = findById(id);
+                
+                userDto.setPhotoName(file.getOriginalFilename());
+                userDto.setPhoto(file.getBytes());
+                
+                return userDto;
+            }
+
+        }
+
+        throw new BadRequestException("Extensão inválida! Deve possuir formato PNG ou JPEG");
+
     }
 
 

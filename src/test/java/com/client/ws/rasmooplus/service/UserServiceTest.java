@@ -134,6 +134,25 @@ class UserServiceTest {
 
     }
 
+    @Test
+    void testUploadPhoto_when_thereIsUserAndFileAndItIsNotPNGorJPEG_then_throwBadRequestException() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        userDto.setId(uuid);
+
+        FileInputStream file = new FileInputStream("src/test/resources/static/avatar.png");
+
+        MockMultipartFile multipartFile = new MockMultipartFile(
+            "file", "avatar.txt", MediaType.MULTIPART_FORM_DATA_VALUE, file);
+        
+        
+        Assertions.assertThrows(BadRequestException.class, 
+            () -> this.userServiceImpl.uploadPhoto(uuid, multipartFile));
+        
+
+        Mockito.verify(this.userRepository, times(0)).findById(any());
+
+    }
+
 
 }
 

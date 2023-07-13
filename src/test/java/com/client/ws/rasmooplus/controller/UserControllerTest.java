@@ -106,7 +106,7 @@ class UserControllerTest {
 
         MockMultipartFile multipartFile = new MockMultipartFile(
             "file", "avatar.pgn", MediaType.MULTIPART_FORM_DATA_VALUE, file);
-
+        
         Mockito.when(this.userService.uploadPhoto(uuid, multipartFile)).thenReturn(new UserDto());
         
         MockMultipartHttpServletRequestBuilder builder = 
