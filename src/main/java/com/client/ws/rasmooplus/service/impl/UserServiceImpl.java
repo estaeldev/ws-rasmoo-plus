@@ -87,18 +87,34 @@ public class UserServiceImpl implements UserService {
             String extention = fileName.substring(fileName.indexOf("."));
 
             if(extention.startsWith(JPEG) || extention.startsWith(PNG)) {
-                UserDto userDto = findById(id);
+                Optional<User> userOpt = this.userRepository.findById(id);
                 
-                userDto.setPhotoName(file.getOriginalFilename());
-                userDto.setPhoto(file.getBytes());
+                if(userOpt.isPresent()) {
+                    userOpt.get().setPhoto(file.getBytes());
+                    userOpt.get().setPhotoName(fileName);
+                    User userSaved = this.userRepository.save(userOpt.get());
+                    return UserMapper.fromEntityToDto(userSaved);
+                } else {
+                    throw new BadRequestException("Error! User: usuario não encontrado.");
+                }
                 
-                return userDto;
             }
 
         }
 
         throw new BadRequestException("Extensão inválida! Deve possuir formato PNG ou JPEG");
 
+    }
+
+    @Override
+    public byte[] downloadPhoto(UUID id) {
+        UserDto userDto = findById(id);
+        
+        if(Objects.isNull(userDto.getPhoto())) {
+            throw new BadRequestException("Usuario não possui foto");
+        }
+
+        return userDto.getPhoto();
     }
 
 

@@ -64,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponseDto register(RegisterDto registerDto) {
         UserTypeDto userTypeDto = this.userTypeService.findById(registerDto.getUserTypeId());
-
+        
         UserCredentials userCredentialsSaved = this.userCredentialsRepository.save(UserCredentialsMapper
             .fromDtoToEntity(registerDto, UserTypeMapper.fromDtoToEntity(userTypeDto), passwordEncoder));
 

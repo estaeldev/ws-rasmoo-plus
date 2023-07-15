@@ -124,4 +124,17 @@ class UserControllerTest {
         
     }
 
+    @Test
+    void testDownloadPhoto_when_thereIsPhotoInDatabase_then_return200OK() throws Exception {
+        UUID uuid = UUID.randomUUID();
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}/photo", uuid)
+            .contentType(MediaType.IMAGE_PNG)
+            .contentType(MediaType.IMAGE_JPEG)
+            )
+            .andExpect(MockMvcResultMatchers.status().isOk());
+
+        
+    }
+
 }

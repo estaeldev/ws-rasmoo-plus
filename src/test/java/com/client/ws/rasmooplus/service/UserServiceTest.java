@@ -153,6 +153,40 @@ class UserServiceTest {
 
     }
 
+    @Test
+    void testDonwloadPhoto_when_thereIsUserAndPhoto_then_returnByteArray() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        userDto.setId(uuid);
+        userDto.setPhoto(new byte[0]);
+
+        User user = UserMapper.fromDtoToEntity(userDto, userType, null);
+        
+        Mockito.when(this.userRepository.findById(uuid)).thenReturn(Optional.of(user));
+
+        byte[] photo = this.userServiceImpl.downloadPhoto(uuid);
+
+        Assertions.assertNotNull(photo);
+
+        Mockito.verify(this.userRepository, times(1)).findById(any());
+
+    }
+
+    @Test
+    void testDonwloadPhoto_when_thereIsUserAndNotPhoto_then_returnBadRequestException() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        userDto.setId(uuid);
+        userDto.setPhoto(null);
+
+        User user = UserMapper.fromDtoToEntity(userDto, userType, null);
+        
+        Mockito.when(this.userRepository.findById(uuid)).thenReturn(Optional.of(user));
+
+        Assertions.assertEquals("Usuario não possui foto", Assertions.assertThrows(BadRequestException.class, 
+            () -> this.userServiceImpl.downloadPhoto(uuid)).getLocalizedMessage());
+        
+        Mockito.verify(this.userRepository, times(1)).findById(any());
+        
+    }
 
 }
 

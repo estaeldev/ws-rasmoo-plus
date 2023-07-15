@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,12 +35,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDtoCreated);
     }   
 
-    @PatchMapping(value = "/{id}/upload-photo", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}/upload-photo", 
+                produces = MediaType.APPLICATION_JSON_VALUE, 
+                consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserDto> uploadPhoto(@PathVariable("id") final UUID id, @RequestPart("file") final MultipartFile file) throws IOException {
         UserDto userDto = this.userService.uploadPhoto(id, file);
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
     
-
+    @GetMapping(value = "/{id}/photo", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> downloadPhoto(@PathVariable("id") final UUID id) {
+        byte[] photo = this.userService.downloadPhoto(id);
+        return ResponseEntity.status(HttpStatus.OK).body(photo);
+    }
+    
 
 }

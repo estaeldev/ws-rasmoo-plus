@@ -182,7 +182,7 @@ class SubscriptionTypeControllerTest {
 
         SubscriptionTypeDto subscriptionTypeDto = SubscriptionTypeDto.builder()
             .id(null)
-            .name("TE")
+            .name("")
             .accessMonths(13)
             .price(null)
             .productKey("FO")
