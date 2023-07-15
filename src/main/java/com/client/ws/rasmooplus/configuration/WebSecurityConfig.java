@@ -28,6 +28,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    private static final String[] AUTH_SWAGGER_LIST = {
+        "/v3/api-docs/**",
+        "/swagger-ui/**",
+        "/v2/api-docs/**",
+        "/swagger-resources/**"
+    };
+
     private final UserCredentialsRepository userCredentialsRepository;
     private final TokenService tokenService;
 
@@ -58,7 +65,8 @@ public class WebSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         
         http.authorizeHttpRequests( authorize -> authorize
-        .requestMatchers("/subscription-type", "/subscription-type/*").permitAll()
+        .requestMatchers(AUTH_SWAGGER_LIST).permitAll()
+        .requestMatchers(HttpMethod.GET, "/subscription-type").permitAll()
         .requestMatchers(HttpMethod.POST, "/users").permitAll()
         .requestMatchers(HttpMethod.POST, "/payment/*").permitAll()
         .requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
