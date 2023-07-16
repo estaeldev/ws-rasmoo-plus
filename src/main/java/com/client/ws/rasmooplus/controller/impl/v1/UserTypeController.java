@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.controller;
+package com.client.ws.rasmooplus.controller.impl.v1;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.client.ws.rasmooplus.controller.openapi.v1.UserTypeOpenApi;
 import com.client.ws.rasmooplus.dto.UserTypeDto;
 import com.client.ws.rasmooplus.service.UserTypeService;
 
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/user-type")
 @RequiredArgsConstructor
-public class UserTypeController {
+public class UserTypeController implements UserTypeOpenApi {
 
     private final UserTypeService userTypeService;
 
@@ -52,7 +53,7 @@ public class UserTypeController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") final Long id) {
+    public <T extends ResponseEntity<T>> ResponseEntity<Void> deleteById(@PathVariable("id") final Long id) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(this.userTypeService.deleteById(id));
     }
     

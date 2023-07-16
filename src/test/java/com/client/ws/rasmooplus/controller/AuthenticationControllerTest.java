@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.client.ws.rasmooplus.controller.impl.AuthenticationController;
 import com.client.ws.rasmooplus.dto.AuthenticationResponseDto;
 import com.client.ws.rasmooplus.dto.LoginDto;
 import com.client.ws.rasmooplus.dto.RegisterDto;

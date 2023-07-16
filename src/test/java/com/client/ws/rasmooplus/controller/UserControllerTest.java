@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.client.ws.rasmooplus.controller.impl.UserController;
 import com.client.ws.rasmooplus.dto.UserDto;
 import com.client.ws.rasmooplus.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;

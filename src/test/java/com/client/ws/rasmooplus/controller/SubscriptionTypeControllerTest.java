@@ -27,6 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.client.ws.rasmooplus.controller.impl.SubscriptionTypeController;
 import com.client.ws.rasmooplus.dto.SubscriptionTypeDto;
 import com.client.ws.rasmooplus.service.SubscriptionTypeService;
 import com.fasterxml.jackson.databind.ObjectMapper;

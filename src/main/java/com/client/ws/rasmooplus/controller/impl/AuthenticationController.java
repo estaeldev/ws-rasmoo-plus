@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.controller;
+package com.client.ws.rasmooplus.controller.impl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.client.ws.rasmooplus.controller.openapi.v1.AuthenticationOpenApi;
 import com.client.ws.rasmooplus.dto.AuthenticationResponseDto;
 import com.client.ws.rasmooplus.dto.LoginDto;
 import com.client.ws.rasmooplus.dto.RegisterDto;
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthenticationController implements AuthenticationOpenApi{
 
     private final AuthenticationService authenticationService;
     

@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.client.ws.rasmooplus.controller.impl.PaymentInfoController;
 import com.client.ws.rasmooplus.dto.PaymentProcessDto;
 import com.client.ws.rasmooplus.dto.UserPaymentInfoDto;
 import com.client.ws.rasmooplus.service.PaymentInfoService;

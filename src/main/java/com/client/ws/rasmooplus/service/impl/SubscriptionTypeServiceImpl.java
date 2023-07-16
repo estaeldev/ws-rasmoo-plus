@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
-import com.client.ws.rasmooplus.controller.SubscriptionTypeController;
+import com.client.ws.rasmooplus.controller.impl.SubscriptionTypeController;
 import com.client.ws.rasmooplus.dto.SubscriptionTypeDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
