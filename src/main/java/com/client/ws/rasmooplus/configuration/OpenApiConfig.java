@@ -1,6 +1,8 @@
 package com.client.ws.rasmooplus.configuration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,34 +27,21 @@ import io.swagger.v3.oas.models.tags.Tag;
 )
 public class OpenApiConfig {
     
+    public static final String AUTENTICACAO = "Authentication";
+    public static final String PAYMENT_INFO = "PaymentInfo";
+    public static final String SUBSCRIPTION_TYPE = "SubscriptionType";
+    public static final String USER = "User";
+    public static final String USER_TYPE = "UserType";
+
     @Bean
     OpenAPI api() {
-        Tag userType = new Tag();
-        userType.setName("UserType");
-        userType.setDescription("Endpoit para UserType");
-
-        Tag user = new Tag();
-        user.setName("User");
-        user.setDescription("Endpoit para User");
-
-        Tag subscriptionType = new Tag();
-        subscriptionType.setName("SubscriptionType");
-        subscriptionType.setDescription("Endpoit para SubsciptionType");
-
-        Tag paymentInfo = new Tag();
-        paymentInfo.setName("PaymentInfo");
-        paymentInfo.setDescription("Endpoit para PaymentInfo");
-
-        Tag authentication = new Tag();
-        authentication.setName("Authentication");
-        authentication.setDescription("Endpoit para Authentication");
 
         SecurityRequirement security = new SecurityRequirement();
         security.addList("bearerAuth");
         
         return new OpenAPI()
             .info(apiInfo())
-            .tags(Arrays.asList(userType, user, subscriptionType, paymentInfo, authentication))
+            .tags(tags())
             .security(Arrays.asList(security));
         
     }
@@ -64,11 +53,43 @@ public class OpenApiConfig {
         Info info = new Info();
         info.setTitle("Rasmoo Plus");
         info.setDescription("Api para atender o client Rasmoo Plus");
-        info.version("1.0");
+        info.version("1.0.0");
         info.license(license);
 
         return info;
     
+    }
+
+    private List<Tag> tags() {
+        List<Tag> tagList = new ArrayList<>();
+
+        Tag userType = new Tag();
+        userType.setName(USER_TYPE);
+        userType.setDescription("Operações onde é escolhido o perfil do usuario na plataforma");
+
+        Tag user = new Tag();
+        user.setName(USER);
+        user.setDescription("Operações responsaveis pela criação e informaçoes do usuario");
+
+        Tag subscriptionType = new Tag();
+        subscriptionType.setName(SUBSCRIPTION_TYPE);
+        subscriptionType.setDescription("Operações onde é escolhido o tipo de plano na plataforma");
+
+        Tag paymentInfo = new Tag();
+        paymentInfo.setName(PAYMENT_INFO);
+        paymentInfo.setDescription("Operações responsaveis pelo processamento do pagamento do usuario");
+
+        Tag authentication = new Tag();
+        authentication.setName(AUTENTICACAO);
+        authentication.setDescription("Operações responsaveis pela validação e acesso do usuario");
+
+        tagList.add(userType);
+        tagList.add(user);
+        tagList.add(subscriptionType);
+        tagList.add(paymentInfo);
+        tagList.add(authentication);
+
+        return tagList;
     }
 
 }

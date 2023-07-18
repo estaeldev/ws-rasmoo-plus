@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.client.ws.rasmooplus.controller.openapi.v1.AuthenticationOpenApi;
+import com.client.ws.rasmooplus.controller.openapi.AuthenticationOpenApi;
 import com.client.ws.rasmooplus.dto.AuthenticationResponseDto;
 import com.client.ws.rasmooplus.dto.LoginDto;
 import com.client.ws.rasmooplus.dto.RegisterDto;

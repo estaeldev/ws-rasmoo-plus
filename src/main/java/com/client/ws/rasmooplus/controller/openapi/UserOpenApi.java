@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.controller.openapi.v1;
+package com.client.ws.rasmooplus.controller.openapi;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.client.ws.rasmooplus.configuration.OpenApiConfig;
 import com.client.ws.rasmooplus.dto.UserDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "User")
+@Tag(name = OpenApiConfig.USER)
 public interface UserOpenApi {
     
     @Operation(summary = "Cria um novo usuario")

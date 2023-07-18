@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.client.ws.rasmooplus.controller.openapi.v1.UserOpenApi;
+import com.client.ws.rasmooplus.controller.openapi.UserOpenApi;
 import com.client.ws.rasmooplus.dto.UserDto;
 import com.client.ws.rasmooplus.service.UserService;
 

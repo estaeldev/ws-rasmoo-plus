@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.controller.impl.v1;
+package com.client.ws.rasmooplus.controller.impl;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.client.ws.rasmooplus.controller.openapi.v1.UserTypeOpenApi;
+import com.client.ws.rasmooplus.controller.openapi.UserTypeOpenApi;
 import com.client.ws.rasmooplus.dto.UserTypeDto;
 import com.client.ws.rasmooplus.service.UserTypeService;
 

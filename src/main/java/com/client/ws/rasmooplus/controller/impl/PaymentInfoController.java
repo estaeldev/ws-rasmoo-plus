@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.client.ws.rasmooplus.controller.openapi.v1.PaymentInfoOpenApi;
+import com.client.ws.rasmooplus.controller.openapi.PaymentInfoOpenApi;
 import com.client.ws.rasmooplus.dto.PaymentProcessDto;
 import com.client.ws.rasmooplus.service.PaymentInfoService;
 
